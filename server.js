@@ -1,46 +1,26 @@
 require("dotenv").config();
 const express = require("express");
-const fetch = require("node-fetch");
+let ejs = require("ejs");
 const app = express();
-
-const { Client } = require("@notionhq/client");
-const notion = new Client({ auth: process.env.TOKEN });
+app.set("views", "./views");
+app.set("view engine", "ejs");
+const notionjs = require("./notion");
 
 app.get("/", (req, res) => {
   try {
     (async () => {
-      const databaseId = "94209317cd464cb3a63895c79d2234e1";
-      const response = await notion.databases.query({
-        database_id: databaseId,
-        // filter: {
-        //   or: [
-        //     {
-        //       property: "In stock",
-        //       checkbox: {
-        //         equals: true,
-        //       },
-        //     },
-        //     {
-        //       property: "Cost of next trip",
-        //       number: {
-        //         greater_than_or_equal_to: 2,
-        //       },
-        //     },
-        //   ],
-        // },
-        // sorts: [
-        //   {
-        //     property: "Last ordered",
-        //     direction: "ascending",
-        //   },
-        // ],
-      });
-      //   var json = response.map((x) => {
-      //     x.results;
-      //   });
-      console.log(response);
-      res.json(response);
+      var title = await notionjs.getTitle(process.env.NOTION_DB);
+      var json = await notionjs.getBlock(process.env.blockID);
+      res.render("index", { title: title, json: json });
     })();
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.get("/db", (req, res) => {
+  try {
+    res.send("LIST OF DB");
   } catch (error) {
     console.log(error);
   }

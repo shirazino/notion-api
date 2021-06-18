@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+      crossorigin="anonymous"
+    />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="https://pics.freeicons.io/uploads/icons/png/18579954981556105328-512.png"
+    />
+    <title>Notion DB</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript">
+      var title = <%-JSON.stringify(title)%>
+
+      render("p", "Notion API", "display-1");
+      render("h1", `Results in: ${title.results[0].properties.Name.title[0].plain_text}`);
+      getTags(title);
+      dropTable();
+
+      function render(element, txt, className, id) {
+        var el = document.createElement(element);
+        el.innerHTML = txt;
+        el.setAttribute("class", className);
+        el.setAttribute("id", id);
+        document.body.appendChild(el);
+      }
+
+      function getTags(title){
+          for (var j=0; j < title.results[0].properties.Tags.multi_select.length; j++){
+            render("pre",`#${title.results[0].properties.Tags.multi_select[j].name}`, "", "tags");
+        }
+      }
+
+       function dropTable (){
+        var json = <%-JSON.stringify(json)%>
+        for (var i=0; i < json.results.length; i++){
+            render("ul",json.results[i].paragraph.text[0].plain_text);
+        }
+      }
+    </script>
+  </body>
+</html>
