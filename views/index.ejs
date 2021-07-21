@@ -17,36 +17,45 @@
     />
     <title>Notion DB</title>
   </head>
-  <body>
-    <div id="root"></div>
+  <body class="mx-5">
+    <div id="root">
+      <a href="/add">add</a>
+    </div>
+
     <script type="text/javascript">
-      var title = <%-JSON.stringify(title)%>
+      var title = <%-JSON.stringify(title)%>;
+      var json = <%-JSON.stringify(json)%>;
 
-      render("p", "Notion API", "display-1");
-      render("h1", `Results in: ${title.results[0].properties.Name.title[0].plain_text}`);
-      getTags(title);
-      dropTable();
+            render("p", "Notion API", "display-1");
+            render("h1", `Results in: ${title.results[0].properties.Name.title[0].plain_text}`);
+            getTags(title);
+            dropTable(json);
 
-      function render(element, txt, className, id) {
-        var el = document.createElement(element);
-        el.innerHTML = txt;
-        el.setAttribute("class", className);
-        el.setAttribute("id", id);
-        document.body.appendChild(el);
-      }
 
-      function getTags(title){
-          for (var j=0; j < title.results[0].properties.Tags.multi_select.length; j++){
-            render("pre",`#${title.results[0].properties.Tags.multi_select[j].name}`, "", "tags");
-        }
-      }
 
-       function dropTable (){
-        var json = <%-JSON.stringify(json)%>
-        for (var i=0; i < json.results.length; i++){
-            render("ul",json.results[i].paragraph.text[0].plain_text);
-        }
-      }
+            function getTags(title){
+                for (var j=0; j < title.results[0].properties.Tags.multi_select.length; j++){
+                  render("p",`#${title.results[0].properties.Tags.multi_select[j].name}`, "", "tags");
+              }
+            }
+
+             function dropTable (jsonn){
+               console.log(jsonn);
+              //   jsonn.results.map((x,index)=>{
+              //    render("p", `${x.paragraph.text[0].text.content}`)
+              //  })
+               var expertList = JSON.stringify(json)
+               render("p", `${expertList}`)
+
+            }
+
+            function render(element, txt, className, id) {
+              var el = document.createElement(element);
+              el.innerHTML = txt;
+              el.setAttribute("class", className);
+              el.setAttribute("id", id);
+              document.body.appendChild(el);
+            }
     </script>
   </body>
 </html>
