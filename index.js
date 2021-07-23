@@ -2,10 +2,11 @@ require("dotenv").config();
 const express = require("express");
 // let ejs = require("ejs");
 const app = express();
-app.set("views", "./views");
-app.set("view engine", "ejs", "json");
+// app.set("views", "./views");
+// app.set("view engine", "ejs", "json");
 const notionjs = require("./notion");
 const moment = require("moment");
+const PORT = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
   try {
@@ -37,4 +38,6 @@ app.get("/add", (req, res) => {
   })();
 });
 
-app.listen(process.env.PORT);
+app.listen(PORT, () => {
+  console.log(`Our app is running on port ${PORT}`);
+});
