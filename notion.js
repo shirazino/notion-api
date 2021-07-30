@@ -56,18 +56,27 @@ async function addDataBlock(blockID, data, content) {
   console.log(response);
 }
 
-async function getAPI() {
+async function getIP() {
   var axios = require("axios");
 
   try {
     const response = await axios.get(
       `https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.API}`
     );
-    return response.data;
+    var json = {
+      IP: response.ip,
+      continent: response.continent_code,
+      country: response.country_name,
+      city: response.city,
+      coords: `${response.latitude} & ${response.longitude}`,
+      isporg: `${response.isp} & ${response.organization}`,
+      time: response.current_time,
+    };
+    return json;
   } catch (error) {
     console.log("error");
     return "error";
   }
 }
 
-module.exports = { getBlock, getTitle, addDataBlock, getAPI };
+module.exports = { getBlock, getTitle, addDataBlock, getIP };
