@@ -79,4 +79,30 @@ async function getIP() {
   }
 }
 
-module.exports = { getBlock, getTitle, addDataBlock, getIP };
+async function getBlocks(url) {
+  const getblock = await notion.blocks.children.list({
+    block_id: url,
+    page_size: 50,
+  });
+
+  return getblock;
+}
+
+async function universalBlocks(tkn, url) {
+  const TKNnotion = new Client({ auth: tkn });
+  const getblock = await TKNnotion.blocks.children.list({
+    block_id: url,
+    page_size: 50,
+  });
+
+  return getblock;
+}
+
+module.exports = {
+  getBlock,
+  getTitle,
+  addDataBlock,
+  getIP,
+  getBlocks,
+  universalBlocks,
+};

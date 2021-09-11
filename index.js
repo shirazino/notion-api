@@ -15,13 +15,8 @@ const PORT = process.env.PORT || 3000;
 app.get("/", (req, res) => {
   try {
     (async () => {
-      var title = await notionjs.getTitle(process.env.NOTION_DB);
-      var json = await notionjs.getBlock(process.env.blockID);
-      // res.send("notion api working".toUpperCase());
       res.json({
         status: "notion api working".toUpperCase(),
-        title: title,
-        json: json,
       });
     })();
   } catch (error) {
@@ -63,6 +58,30 @@ app.get("/fetchdata", (req, res) => {
       res.send(await puppeteer.getScraping("https://masjidenoor.com/"));
     } catch (error) {
       console.log("error");
+    }
+  })();
+});
+
+app.get("/getblock/:blockID", (req, res) => {
+  (async () => {
+    try {
+      const block = req.params.blockID;
+      res.json(await notionjs.getBlocks(block));
+    } catch (error) {
+      res.json(error);
+    }
+  })();
+});
+
+app.get("/integration/:tkn/:block", (req, res) => {
+  (async () => {
+    try {
+      const tkn = req.params.tkn;
+      const block = req.params.block;
+      // res.send(`${tkn}, ${block}`);
+      res.json(await notionjs.universalBlocks(tkn, block));
+    } catch (error) {
+      res.json(error);
     }
   })();
 });
