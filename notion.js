@@ -56,6 +56,65 @@ async function addDataBlock(blockID, data, content) {
   console.log(response);
 }
 
+async function retrieveDB(id) {
+  const databaseId = id;
+  const response = await notion.databases.retrieve({
+    database_id: databaseId,
+  });
+  return response;
+}
+
+async function queryDB(id, prop, filter) {
+  const response = await notion.databases.query({
+    database_id: id,
+    filter: {
+      property: prop,
+      text: {
+        contains: filter,
+      },
+    },
+  });
+  let l = response.results.length;
+  return { data: response.results };
+}
+
+async function dynamicNotion(blockID, data) {
+  const response = await notion.blocks.children.append({
+    block_id: blockID,
+    children: [
+      // {
+      //   object: "block",
+      //   type: "heading_2",
+      //   heading_2: {
+      //     text: [
+      //       {
+      //         type: "text",
+      //         text: {
+      //           content: data,
+      //         },
+      //       },
+      //     ],
+      //   },
+      // },
+      {
+        object: "block",
+        type: "paragraph",
+        paragraph: {
+          text: [
+            {
+              type: "text",
+              text: {
+                content: data,
+              },
+            },
+          ],
+        },
+      },
+    ],
+  });
+  console.log(response);
+}
+
 async function getIP() {
   var axios = require("axios");
 
@@ -105,4 +164,7 @@ module.exports = {
   getIP,
   getBlocks,
   universalBlocks,
+  dynamicNotion,
+  retrieveDB,
+  queryDB,
 };

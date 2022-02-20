@@ -52,6 +52,19 @@ app.post("/data", (req, res) => {
   })();
 });
 
+app.post("/dynamic/:data", (req, res) => {
+  (async () => {
+    try {
+      await notionjs.dynamicNotion(process.env.blockID, req.params.data);
+      res.send(`Data added to Notion at ${req.params.data}`);
+      console.log(`Data added to Notion at ${req.params.data}`);
+    } catch (error) {
+      res.send(error);
+      console.log(error);
+    }
+  })();
+});
+
 app.get("/fetchdata", (req, res) => {
   (async () => {
     try {
@@ -80,6 +93,28 @@ app.get("/integration/:tkn/:block", (req, res) => {
       const block = req.params.block;
       // res.send(`${tkn}, ${block}`);
       res.json(await notionjs.universalBlocks(tkn, block));
+    } catch (error) {
+      res.json(error);
+    }
+  })();
+});
+
+app.post("/retrievedb", (req, res) => {
+  (async () => {
+    try {
+      let body = req.body;
+      res.json(await notionjs.retrieveDB(body.id));
+    } catch (error) {
+      res.json(error);
+    }
+  })();
+});
+
+app.post("/querydb", (req, res) => {
+  (async () => {
+    try {
+      let body = req.body;
+      res.json(await notionjs.queryDB(body.id, body.prop, body.filter));
     } catch (error) {
       res.json(error);
     }
