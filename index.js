@@ -52,15 +52,17 @@ app.post("/data", (req, res) => {
   })();
 });
 
-app.post("/dynamic/:data", (req, res) => {
+app.post("/dynamicpost", (req, res) => {
   (async () => {
     try {
-      await notionjs.dynamicNotion(process.env.blockID, req.params.data);
-      res.send(`Data added to Notion at ${req.params.data}`);
-      console.log(`Data added to Notion at ${req.params.data}`);
+      await notionjs.dynamicNotion(
+        req.body.blockID,
+        req.body.time,
+        req.body.data
+      );
+      res.send(`Data successfully sent - ${res.statusCode}`);
     } catch (error) {
-      res.send(error);
-      console.log(error);
+      res.send(`Something went wrong - ${res.statusCode} : ${error}`);
     }
   })();
 });

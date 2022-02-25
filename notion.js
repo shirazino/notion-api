@@ -78,24 +78,24 @@ async function queryDB(id, prop, filter) {
   return { data: response.results };
 }
 
-async function dynamicNotion(blockID, data) {
+async function dynamicNotion(blockID, time, data) {
   const response = await notion.blocks.children.append({
     block_id: blockID,
     children: [
-      // {
-      //   object: "block",
-      //   type: "heading_2",
-      //   heading_2: {
-      //     text: [
-      //       {
-      //         type: "text",
-      //         text: {
-      //           content: data,
-      //         },
-      //       },
-      //     ],
-      //   },
-      // },
+      {
+        object: "block",
+        type: "heading_2",
+        heading_2: {
+          text: [
+            {
+              type: "text",
+              text: {
+                content: time,
+              },
+            },
+          ],
+        },
+      },
       {
         object: "block",
         type: "paragraph",
